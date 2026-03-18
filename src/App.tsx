@@ -1,4 +1,3 @@
-import Hello from "./components/Hello";
 import UserCrud from "./components/UserCrud";
 
 function App() {
