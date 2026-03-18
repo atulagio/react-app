@@ -34,7 +34,7 @@ function UserCrud() {
     }, []);
 
     // READ
-    async function readUsers_bk(): Promise<void> {
+    async function readUsers(): Promise<void> {
         setLoading(true);
         setError(null);
         try {
@@ -49,28 +49,6 @@ function UserCrud() {
         } finally {
             setLoading(false);
         }
-    }
-
-    function readUsers(): void {
-        setLoading(true);
-        setError(null);
-
-        fetch(API_BASE)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`Failed (${res.status})`);
-                }
-                return res.json();
-            })
-            .then((data: User[]) => {
-                setUsers(data);
-            })
-            .catch(err => {
-                setError(err.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
     }
 
     // CREATE
