@@ -1,5 +1,5 @@
 # Step 1: Build React app
-FROM node:18 as build
+FROM node:22 as build
 
 WORKDIR /app
 COPY package*.json ./
