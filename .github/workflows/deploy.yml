@@ -1,0 +1,39 @@
+name: Deploy React App to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/react-app
+
+            echo "Pull latest code"
+            git pull origin master
+
+            echo "Stop old container"
+            docker stop $(docker ps -q) || true
+            docker rm $(docker ps -aq) || true
+
+            echo "Remove old image"
+            docker rmi react-app || true
+
+            echo "Build new image"
+            docker build -t react-app .
+
+            echo "Run container"
+            docker run -d -p 80:80 react-app
